@@ -1,0 +1,12 @@
+.login {
+  width: 100vw;
+  height: 100vh;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+
+  .loginForm {
+    width: 430px;
+    background-color: pink;
+  }
+}

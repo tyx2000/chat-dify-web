@@ -1,0 +1,75 @@
+.modelSelector {
+  display: flex;
+  gap: 8px;
+  height: 34px;
+  padding: 0 10px;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: all linear 0.2s;
+  position: relative;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #fafafa;
+  }
+
+  .modelName {
+    font-size: 14px;
+  }
+
+  .arrowIcon {
+    width: 16px;
+    height: 16px;
+    transition: all linear 0.2s;
+  }
+
+  .rotateArrowIcon {
+    transform: rotate(180deg);
+  }
+
+  .dropdown {
+    position: absolute;
+    width: 330px;
+    padding: 4px;
+    top: 40px;
+    left: 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    transition: all linear 0.2s;
+
+    opacity: 0;
+    z-index: -1;
+    transform: translateY(-10px);
+
+    .modelOption {
+      height: 60px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      transition: all linear 0.2s;
+      &:hover {
+        background-color: #fafafa;
+      }
+      & > div:first-child {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 8px;
+        & > div:last-child {
+          font-size: 13px;
+          color: #494845;
+        }
+      }
+    }
+  }
+
+  .showDropdown {
+    opacity: 1;
+    z-index: 999;
+    transform: translateY(0px);
+  }
+}
