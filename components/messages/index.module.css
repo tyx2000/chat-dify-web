@@ -1,4 +1,40 @@
 .messages {
   flex: 1;
   overflow: hidden auto;
+  display: flex;
+  justify-content: center;
+
+  .container {
+    width: 70%;
+    max-width: 800px;
+    min-width: 200px;
+    padding: 10px;
+  }
+
+  .messageItem {
+    display: flex;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .local {
+    justify-content: flex-end;
+  }
+  .remote {
+    justify-content: flex-start;
+  }
+  .role {
+    transform: translateY(5px);
+  }
+  .localContent,
+  .remoteContent {
+    max-width: 70%;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    word-wrap: break-word;
+  }
+  .remoteContent {
+    background-color: #eee;
+  }
 }

@@ -1,3 +1,59 @@
 .input {
-  height: 100px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+  border-top: 1px dotted #eee;
+
+  .container {
+    width: 80%;
+    max-width: 800px;
+    min-width: 200px;
+
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  textarea {
+    width: 100%;
+    resize: none;
+    font-size: 16px;
+
+    background-color: #f4f4f5;
+    border: 2px solid #e4e4e7;
+    border-radius: 12px;
+
+    padding: 12px;
+    transition: all linear 0.3s;
+    outline: none;
+    &:focus {
+      border-color: #09090b;
+    }
+  }
+
+  .action {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    gap: 10px;
+    div {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    div:first-child {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      transform: rotate(-45deg);
+    }
+    div:last-child {
+      background-color: #8ca5e9;
+    }
+  }
 }

@@ -1,12 +1,68 @@
 .login {
   width: 100vw;
   height: 100vh;
-  background-color: #fafafa;
   display: flex;
   justify-content: center;
 
   .loginForm {
     width: 430px;
-    background-color: pink;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
+  }
+
+  .title {
+    font-size: 24px;
+    margin: 20px 0 5px;
+  }
+  .tip {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  .field {
+    margin: 15px 0 0;
+    div {
+      color: #52525b;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    input {
+      width: 320px;
+      height: 40px;
+      background-color: #f4f4f5;
+      border: 2px solid #e4e4e7;
+      border-radius: 8px;
+      padding: 4px 10px;
+      transition: all linear 0.3s;
+      outline: none;
+      &:focus {
+        border-color: #09090b;
+      }
+    }
+  }
+  .actionButton {
+    width: 320px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #2457dd;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 8px;
+    border: none;
+    margin: 40px 0 20px;
+    &:hover {
+      background-color: #3967e0;
+    }
+  }
+  .switch {
+    color: #52525b;
+    font-size: 14px;
+  }
+  .router {
+    font-weight: bold;
   }
 }
