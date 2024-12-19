@@ -4,10 +4,10 @@ import { NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const { url, nextUrl } = request;
   const cookieStore = await cookies();
-  const token = cookieStore.get('dify-token');
-  const modelId = cookieStore.get('modelId');
+  const token = cookieStore.get('session')?.value || '';
+  const modelId = cookieStore.get('modelId')?.value || '';
 
-  console.log({ token, modelId });
+  console.log('middleware', { token, modelId });
 }
 
 export const config = {

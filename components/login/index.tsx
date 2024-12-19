@@ -5,14 +5,22 @@ import styles from './index.module.css';
 import Logo from './logo.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useActionState } from 'react';
 
 export default function Login({ mode }: { mode: 'login' | 'register' }) {
   const isLogin = mode === 'login';
   const buttonText = isLogin ? 'LoGin' : 'ReGister';
 
+  const [state, action, pending] = useActionState(
+    isLogin ? login : register,
+    undefined,
+  );
+
+  console.log('state', state);
+
   return (
     <div className={styles.login}>
-      <div action={isLogin ? login : register} className={styles.loginForm}>
+      <form action={action} className={styles.loginForm}>
         <Image src={Logo} alt="logo" width={120} height={120} />
         <h3 className={styles.title}>{buttonText}</h3>
         <div className={styles.tip}>
@@ -22,13 +30,28 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
         </div>
         <div className={styles.field}>
           <div>Email Address</div>
-          <input type="email" autoComplete="off" name="email" />
+          <input
+            type="email"
+            autoComplete="off"
+            name="email"
+            id="email"
+            placeholder="user@amer.com"
+          />
         </div>
         <div className={styles.field}>
           <div>Password</div>
-          <input type="password" autoComplete="off" name="password" />
+          <input
+            type="password"
+            autoComplete="off"
+            name="password"
+            id="password"
+          />
         </div>
-        <button type="submit" className={styles.actionButton}>
+        <button
+          disabled={pending}
+          type="submit"
+          className={styles.actionButton}
+        >
           {buttonText}
         </button>
         <div className={styles.switch}>
@@ -43,7 +66,7 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
           </Link>
           {isLogin ? 'for free' : 'instead'}.
         </div>
-      </div>
+      </form>
     </div>
   );
 }

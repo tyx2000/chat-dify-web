@@ -4,22 +4,26 @@ import { z } from 'zod';
 
 import { createUser, getUser } from '@/utils/db/queries';
 import { compare } from 'bcrypt-ts';
+import { createSession } from '@/utils/session';
+import { redirect, RedirectType } from 'next/navigation';
 
 const authFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-export const login = async (formData: FormData) => {
+// @ts-ignore
+export const login = async (state: any, formData: FormData) => {
   try {
     const validatedData = authFormSchema.parse({
       email: formData.get('email'),
       password: formData.get('password'),
     });
 
-    const users = await getUser(validatedData.email);
+    const { data: users = [], error } = await getUser(validatedData.email);
 
-    if (users.length === 0) {
+    console.log(users);
+    if (!users || users.length === 0) {
       return { status: 'failed', error: 'user_not_exist' };
     }
 
@@ -31,7 +35,10 @@ export const login = async (formData: FormData) => {
       return { status: 'failed', error: 'wrong_password' };
     }
 
-    return { status: 'success', user: users[0] };
+    await createSession({ userId: users[0].id });
+    redirect('/', RedirectType.replace);
+
+    // return { status: 'success', user: users[0] };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return { status: 'failed', error: 'invalid_data' };
@@ -40,16 +47,16 @@ export const login = async (formData: FormData) => {
   }
 };
 
-export const register = async (formData: FormData) => {
+export const register = async (state: any, formData: FormData) => {
   try {
     const validatedData = authFormSchema.parse({
       email: formData.get('email'),
       password: formData.get('password'),
     });
 
-    const [user] = await getUser(validatedData.email);
+    const { data = [], error } = await getUser(validatedData.email);
 
-    if (user) {
+    if (data && data.length) {
       return { status: 'failed', error: 'user_exists' };
     }
 
@@ -58,7 +65,7 @@ export const register = async (formData: FormData) => {
     const fd = new FormData();
     fd.append('email', validatedData.email);
     fd.append('password', validatedData.password);
-    await login(fd);
+    await login(null, fd);
 
     return { status: 'success' };
   } catch (error) {

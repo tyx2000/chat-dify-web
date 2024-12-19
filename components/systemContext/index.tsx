@@ -3,7 +3,6 @@
 import { createContext, ReactNode, useState } from 'react';
 
 interface ContextProps {
-  token: string | undefined;
   openSidebar: boolean;
   toggleSidebar: (c: boolean) => void;
 }
@@ -11,17 +10,11 @@ interface ContextProps {
 // @ts-ignore
 export const SystemContext = createContext<ContextProps>({});
 
-export default function SystemProvider({
-  children,
-  token,
-}: {
-  children: ReactNode;
-  token?: string;
-}) {
+export default function SystemProvider({ children }: { children: ReactNode }) {
   const [openSidebar, setOpenSidebar] = useState(true);
   return (
     <SystemContext
-      value={{ token, openSidebar, toggleSidebar: (c) => setOpenSidebar(c) }}
+      value={{ openSidebar, toggleSidebar: (c) => setOpenSidebar(c) }}
     >
       {children}
     </SystemContext>
