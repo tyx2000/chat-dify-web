@@ -2,10 +2,13 @@
 
 import { login, register } from '@/actions/user';
 import styles from './index.module.css';
-import Logo from './logo.png';
+import Logo from '@/assets/logo.png';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
+import { redirect, RedirectType } from 'next/navigation';
+import { toast } from 'sonner';
+import Loading from '../loading';
 
 export default function Login({ mode }: { mode: 'login' | 'register' }) {
   const isLogin = mode === 'login';
@@ -16,7 +19,15 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
     undefined,
   );
 
-  console.log('state', state);
+  useEffect(() => {
+    if (state?.status === 'failed') {
+      toast.error(state?.error || 'network_error');
+    }
+    if (state?.status === 'success') {
+      toast.success('login_success');
+      redirect('/', RedirectType.replace);
+    }
+  }, [state?.status]);
 
   return (
     <div className={styles.login}>
@@ -52,7 +63,8 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
           type="submit"
           className={styles.actionButton}
         >
-          {buttonText}
+          {pending && <Loading />}
+          <div>{buttonText}</div>
         </button>
         <div className={styles.switch}>
           {isLogin ? 'Dont' : 'AlreadY'} have an account?&nbsp;

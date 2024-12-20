@@ -9,7 +9,7 @@ config({ path: '.env.local' });
 const secreKey = process.env.SESSION_SECRET_KEY;
 const encodedKey = new TextEncoder().encode(secreKey);
 
-export const encrypt = async (payload: { userId: string }) => {
+export const encrypt = async (payload: { userId: string; email: string }) => {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -24,11 +24,14 @@ export const decrypt = async (token: string) => {
     });
     return payload;
   } catch (error) {
-    return null;
+    return {};
   }
 };
 
-export const createSession = async (payload: { userId: string }) => {
+export const createSession = async (payload: {
+  userId: string;
+  email: string;
+}) => {
   const token = await encrypt(payload);
   const cookieStore = await cookies();
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);

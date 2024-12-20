@@ -24,7 +24,6 @@ config({ path: '.env.local' });
 export const getUser = async (email: string) => {
   const supabase = await createClient();
   try {
-    // return await db.select().from(user).where(eq(user.email, email));
     return await supabase.from('User').select().eq('email', email);
   } catch (error) {
     console.error('Failed to get user from database', error);

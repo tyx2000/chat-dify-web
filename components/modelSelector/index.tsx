@@ -1,5 +1,3 @@
-'use client';
-
 import styles from './index.module.css';
 
 import { ChevronDownIcon, CheckCircleFillIcon } from '../icons';
@@ -12,29 +10,14 @@ export default function ModelSelector({
 }: {
   selectedModelId: string;
 }) {
-  const [showDropdown, setShowDropdown] = useState(false);
-
   return (
-    <div
-      className={styles.modelSelector}
-      onClick={() => setShowDropdown((c) => !c)}
-    >
+    <div className={styles.modelSelector}>
       <div className={styles.modelName}>{selectedModelId}</div>
-      <div
-        className={[
-          styles.arrowIcon,
-          showDropdown ? styles.rotateArrowIcon : '',
-        ].join(' ')}
-      >
+      <div className={styles.arrowIcon}>
         <ChevronDownIcon />
       </div>
 
-      <div
-        className={[
-          styles.dropdown,
-          showDropdown ? styles.showDropdown : '',
-        ].join(' ')}
-      >
+      <div className={styles.dropdown}>
         {models.map((model) => (
           <div
             key={model.id}

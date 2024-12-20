@@ -4,16 +4,23 @@ import { z } from 'zod';
 
 import { createUser, getUser } from '@/utils/db/queries';
 import { compare } from 'bcrypt-ts';
-import { createSession } from '@/utils/session';
-import { redirect, RedirectType } from 'next/navigation';
+import { createSession, deleteSession } from '@/utils/session';
+import { revalidatePath } from 'next/cache';
 
 const authFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-// @ts-ignore
-export const login = async (state: any, formData: FormData) => {
+export interface LoginResponse {
+  status: 'failed' | 'success';
+  user?: { id: string; email: string };
+  error?: 'user_not_exist' | 'wrong_password' | 'invalid_data';
+}
+export const login = async (
+  state: any,
+  formData: FormData,
+): Promise<LoginResponse> => {
   try {
     const validatedData = authFormSchema.parse({
       email: formData.get('email'),
@@ -22,7 +29,8 @@ export const login = async (state: any, formData: FormData) => {
 
     const { data: users = [], error } = await getUser(validatedData.email);
 
-    console.log(users);
+    if (error) throw error;
+
     if (!users || users.length === 0) {
       return { status: 'failed', error: 'user_not_exist' };
     }
@@ -35,16 +43,26 @@ export const login = async (state: any, formData: FormData) => {
       return { status: 'failed', error: 'wrong_password' };
     }
 
-    await createSession({ userId: users[0].id });
-    redirect('/', RedirectType.replace);
+    await createSession({ userId: users[0].id, email: users[0].email });
 
-    // return { status: 'success', user: users[0] };
+    /**
+     * Invoking the redirect() function throws a NEXT_REDIRECT error
+     * and terminates rendering of the route segment in which it was thrown.
+     *
+     * redirect("/", RedirectType.replace);
+     */
+    return { status: 'success', user: users[0].id };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return { status: 'failed', error: 'invalid_data' };
     }
     return { status: 'failed' };
   }
+};
+
+export const logout = async () => {
+  await deleteSession();
+  revalidatePath('/');
 };
 
 export const register = async (state: any, formData: FormData) => {

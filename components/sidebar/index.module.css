@@ -3,7 +3,9 @@
   height: 100vh;
   background-color: #fafafa;
   transition: all ease-out 0.2s;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   .sidebarHeader {
     width: 100%;
@@ -13,6 +15,15 @@
     justify-content: space-between;
     align-items: center;
   }
+}
+
+.hideSidebar {
+  width: 0;
+  transform: translateX(-250px);
+}
+
+.chatHistory {
+  flex: 1;
 
   .notLoginTip {
     padding: 16px;
@@ -21,7 +32,66 @@
   }
 }
 
-.hideSidebar {
-  width: 0;
-  transform: translateX(-250px);
+.userEmail {
+  margin: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    background-color: #f4f4f5;
+    border-radius: 0 0 8px 8px;
+    .arrowIcon {
+      transform: rotate(180deg);
+    }
+    .options {
+      opacity: 1;
+      z-index: 999;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    }
+  }
+
+  .email {
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .arrowIcon {
+    transition: all linear 0.2s;
+  }
+  .options {
+    width: 100%;
+    position: absolute;
+    bottom: 32px;
+    left: -8px;
+    margin: 8px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #fff;
+    z-index: -1;
+    opacity: 0;
+    transition: all linear 0.2s;
+
+    & > div {
+      height: 40px;
+      line-height: 40px;
+      border-radius: 8px;
+      transition: all linear 0.2s;
+      text-indent: 10px;
+      &:hover {
+        cursor: pointer;
+        text-indent: 20px;
+        font-weight: bold;
+        background-color: #f4f4f5;
+      }
+    }
+  }
 }

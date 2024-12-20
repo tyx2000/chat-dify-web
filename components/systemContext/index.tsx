@@ -14,7 +14,10 @@ export default function SystemProvider({ children }: { children: ReactNode }) {
   const [openSidebar, setOpenSidebar] = useState(true);
   return (
     <SystemContext
-      value={{ openSidebar, toggleSidebar: (c) => setOpenSidebar(c) }}
+      value={{
+        openSidebar,
+        toggleSidebar: (c) => setOpenSidebar(c),
+      }}
     >
       {children}
     </SystemContext>

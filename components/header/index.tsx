@@ -2,7 +2,7 @@
 
 import styles from './index.module.css';
 import { SidebarLeftIcon } from '../icons';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { SystemContext } from '../systemContext';
 import ModelSelector from '../modelSelector';
 import { PlusIcon } from '../icons';
@@ -10,7 +10,9 @@ import Link from 'next/link';
 
 export default function Header({
   selectedModelId,
+  token,
 }: {
+  token?: string;
   selectedModelId: string;
 }) {
   const { openSidebar, toggleSidebar } = useContext(SystemContext);
@@ -31,9 +33,13 @@ export default function Header({
         )}
         <ModelSelector selectedModelId={selectedModelId} />
       </div>
-      <Link href="/login">
-        <div className={styles.loginButton}>LoGin</div>
-      </Link>
+      {token ? (
+        <div className={styles.loginButton}>Share</div>
+      ) : (
+        <Link href="/login">
+          <div className={styles.loginButton}>LoGin</div>
+        </Link>
+      )}
     </div>
   );
 }

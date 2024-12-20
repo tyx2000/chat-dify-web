@@ -1,7 +1,13 @@
 import styles from './index.module.css';
 import { PaperclipIcon, ArrowUpIcon } from '../icons';
 
-export default function Input() {
+export default function Input({
+  onSend,
+  onUpload,
+}: {
+  onSend: () => void;
+  onUpload: () => void;
+}) {
   return (
     <div className={styles.input}>
       <div className={styles.container}>
@@ -11,10 +17,10 @@ export default function Input() {
           placeholder="Send a message..."
         />
         <div className={styles.action}>
-          <div title="upload file">
+          <div title="upload file" onClick={onUpload}>
             <PaperclipIcon />
           </div>
-          <div title="send">
+          <div title="send" onClick={onSend}>
             <ArrowUpIcon />
           </div>
         </div>

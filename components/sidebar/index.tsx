@@ -3,10 +3,18 @@
 import { useContext } from 'react';
 import styles from './index.module.css';
 import { SystemContext } from '../systemContext';
-import { PlusIcon } from '../icons';
+import { PlusIcon, ChevronDownIcon } from '../icons';
+import ChatHistory from './chatHistory';
+import Image from 'next/image';
+import Logo from '@/assets/logo.png';
+import UserNav from './userNav';
 
-export default function Sidebar() {
-  const { openSidebar, token } = useContext(SystemContext);
+export default function Sidebar({
+  user,
+}: {
+  user: { email?: string; userId?: string };
+}) {
+  const { openSidebar } = useContext(SystemContext);
   return (
     <div
       className={[styles.sidebar, openSidebar ? '' : styles.hideSidebar].join(
@@ -17,11 +25,8 @@ export default function Sidebar() {
         <h3>ChatBot</h3>
         <PlusIcon />
       </div>
-      {!token && (
-        <div className={styles.notLoginTip}>
-          login to save and visit previous conversation!
-        </div>
-      )}
+      <ChatHistory user={user} />
+      {user?.email && <UserNav user={user} />}
     </div>
   );
 }

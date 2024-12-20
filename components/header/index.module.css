@@ -35,5 +35,9 @@
     color: #fff;
     font-size: 14px;
     background-color: #2457dd;
+    cursor: pointer;
+    &:hover {
+      background-color: #3967e0;
+    }
   }
 }
