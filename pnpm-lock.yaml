@@ -47,6 +47,9 @@ importers:
       sonner:
         specifier: ^1.7.1
         version: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      swr:
+        specifier: ^2.2.5
+        version: 2.2.5(react@19.0.0)
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -860,6 +863,11 @@ packages:
       babel-plugin-macros:
         optional: true
 
+  swr@2.2.5:
+    resolution: {integrity: sha512-QtxqyclFeAsxEUeZIYmsaQ0UjimSq1RZ9Un7I68/0ClKK/U3LoyQunwkQfJZr2fc22DfIXLNDc2wFyTEikCUpg==}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0
+
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
@@ -873,6 +881,11 @@ packages:
 
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
+  use-sync-external-store@1.4.0:
+    resolution: {integrity: sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -1461,6 +1474,12 @@ snapshots:
       client-only: 0.0.1
       react: 19.0.0
 
+  swr@2.2.5(react@19.0.0):
+    dependencies:
+      client-only: 0.0.1
+      react: 19.0.0
+      use-sync-external-store: 1.4.0(react@19.0.0)
+
   tr46@0.0.3: {}
 
   tslib@2.8.1: {}
@@ -1468,6 +1487,10 @@ snapshots:
   typescript@5.7.2: {}
 
   undici-types@6.19.8: {}
+
+  use-sync-external-store@1.4.0(react@19.0.0):
+    dependencies:
+      react: 19.0.0
 
   webidl-conversions@3.0.1: {}
 

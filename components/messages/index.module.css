@@ -1,9 +1,4 @@
-.chatContent {
-  flex: 1;
-  overflow: hidden auto;
-  display: flex;
-  justify-content: center;
-
+.messageContainer {
   .container {
     width: 70%;
     max-width: 800px;
@@ -56,4 +51,11 @@
   .remoteContent {
     background-color: #fafafa;
   }
+}
+
+.messageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  overflow: hidden auto;
 }

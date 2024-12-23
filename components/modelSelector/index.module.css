@@ -40,11 +40,14 @@
     position: absolute;
     width: 330px;
     padding: 4px;
-    top: 35px;
+    top: 33px;
     left: 0;
-    border: 1px solid #ccc;
+    border: 1px solid #fafafa;
     border-radius: 6px;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    box-shadow:
+      rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+      rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
     transition: all linear 0.2s;
     background-color: #fff;
 

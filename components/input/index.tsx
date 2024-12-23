@@ -15,6 +15,12 @@ export default function Input({
           name="message"
           id="messageTa"
           placeholder="Send a message..."
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              onSend();
+            }
+          }}
         />
         <div className={styles.action}>
           <div title="upload file" onClick={onUpload}>

@@ -3,11 +3,10 @@
 import { useContext } from 'react';
 import styles from './index.module.css';
 import { SystemContext } from '../systemContext';
-import { PlusIcon, ChevronDownIcon } from '../icons';
+import { PlusIcon } from '../icons';
 import ChatHistory from './chatHistory';
-import Image from 'next/image';
-import Logo from '@/assets/logo.png';
 import UserNav from './userNav';
+import { Suspense } from 'react';
 
 export default function Sidebar({
   user,
@@ -25,7 +24,9 @@ export default function Sidebar({
         <h3>ChatBot</h3>
         <PlusIcon />
       </div>
-      <ChatHistory user={user} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <ChatHistory user={user} />
+      </Suspense>
       {user?.email && <UserNav user={user} />}
     </div>
   );
