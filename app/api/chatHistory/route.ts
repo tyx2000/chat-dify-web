@@ -1,6 +1,4 @@
 import { cookies } from 'next/headers';
-import { decrypt } from '@/utils/session';
-import { getChatsByUserId } from '@/utils/db/queries';
 import { getChatHistory } from '@/actions/chat';
 
 export async function GET() {
@@ -13,7 +11,6 @@ export async function GET() {
       body: { message: 'Unauthorized' },
     });
   } else {
-    const { userId } = await decrypt(session);
     const chats = await getChatHistory();
     return Response.json(chats);
   }

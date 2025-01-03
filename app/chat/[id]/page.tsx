@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { decrypt } from '@/utils/session';
 import { DEFAULT_MODEL_NAME, models } from '@/constances/models';
 import Chat from '@/components/chat';
+import Sidebar from '@/components/sidebar';
+import styles from '@/app/page.module.css';
 
 export default async function Page({
   params,
@@ -19,11 +21,18 @@ export default async function Page({
 
   const cookieStore = await cookies();
   const session = cookieStore.get('session')?.value;
+  let user = { email: '', userId: '' };
+
   if (!session) {
     return notFound();
   } else {
-    const { userId } = await decrypt(session);
-    if (chat.id !== userId) {
+    const { userId, email } = await decrypt(session);
+
+    //@ts-ignore
+    user = { email, userId };
+
+    // @ts-ignore
+    if (chat.data[0].userId !== userId) {
       return notFound();
     }
   }
@@ -34,5 +43,10 @@ export default async function Page({
     models.find((model) => model.id === modelIdFromCookie)?.id ||
     DEFAULT_MODEL_NAME;
 
-  return <Chat />;
+  return (
+    <div className={styles.page}>
+      <Sidebar user={user} />
+      <Chat id={id} messages={messages.data || []} />
+    </div>
+  );
 }

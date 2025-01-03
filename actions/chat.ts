@@ -9,24 +9,31 @@ export const changeModelId = async (id: string) => {
   cookieStore.set('modelId', id);
 };
 
-export const saveChatAction = async (id: string, title: string) => {
+export const saveChatAction = async (title: string) => {
   const cookieStore = await cookies();
   const session = cookieStore.get('session')!.value;
   const { userId } = await decrypt(session);
-  await saveChat({ id, userId: userId + '', title });
+  return await saveChat({ userId: userId + '', title });
 };
 
 export const saveMessageAction = async (
   chatId: string,
   role: string,
   content: string,
-  createdAt: string,
 ) => {
-  return await saveMessages({ chatId, role, content, createdAt });
+  try {
+    return await saveMessages({
+      chatId,
+      role,
+      content,
+      createdAt: new Date(),
+    });
+  } catch (err) {
+    console.log({ err });
+  }
 };
 
 export const getChatHistory = async () => {
-  console.log('getChatHistory');
   const cookieStore = await cookies();
   const session = cookieStore.get('session')!.value;
   const { userId } = await decrypt(session);

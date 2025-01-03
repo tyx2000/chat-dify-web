@@ -30,6 +30,23 @@
     color: #494845;
     font-size: 14px;
   }
+
+  .chatRecord {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    transition: all linear 0.2s;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #eee;
+
+      height: 40px;
+      line-height: 40px;
+    }
+  }
 }
 
 .userEmail {

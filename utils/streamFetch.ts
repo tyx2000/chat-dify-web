@@ -1,9 +1,58 @@
+/**
+ * 问题：express使用express.json()中间件获取post请求body参数，使sse无法正常发送数据
+ * const content =
+  'a quick fox jumps over the lazy dog a quick fox jumps over the lazy dog a quick fox jumps over the lazy dog a quick fox jumps over the lazy dog';
+
+app.post('/dify-sse', (req, res) => {
+  console.log('rrrrrrr', req.query.conversation_id);
+
+  const { conversation_id } = req.query;
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  const randomString = () => Math.random().toString(36).slice(2);
+  const sendEvent = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  let task_id = `t_${randomString()}`,
+    start = 0;
+
+  const timerId = setInterval(() => {
+    const answer = content.slice(start, start + 5);
+    const id = `m_${randomString()}`;
+
+    start += 5;
+    const nextAnswer = content.slice(start, start + 5);
+
+    console.log({ answer, id, start, nextAnswer });
+
+    sendEvent({
+      event: nextAnswer ? 'message' : 'message_end',
+      task_id: conversation_id || task_id,
+      id,
+      answer,
+    });
+
+    if (!nextAnswer) clearInterval(timerId);
+  }, 100);
+
+  req.on('close', () => {
+    clearInterval(timerId);
+    res.end();
+  });
+});
+ */
+
 const streamFetch = async (
   query: string,
   conversation_id: string,
   callback: Function,
 ) =>
-  fetch(process.env.DIFY_APP_HOST!, {
+  // fetch(process.env.DIFY_APP_HOST!, {
+  fetch('http://localhost:8080/dify-sse?conversation_id=' + conversation_id, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + process.env.DIFY_APP_KEY!,

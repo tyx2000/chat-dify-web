@@ -8,10 +8,16 @@ import streamFetch from '@/utils/streamFetch';
 import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
 import { saveChatAction, saveMessageAction } from '@/actions/chat';
+import { redirect, RedirectType } from 'next/navigation';
 
-export default function Messages() {
-  const [taskId, setTaskId] = useState('');
-  const [conversatinId, setConversationId] = useState('');
+export default function Messages({
+  id,
+  messages,
+}: {
+  id?: string;
+  messages?: { chatId: string; content: string; id: string; role: string }[];
+}) {
+  const [conversatinId, setConversationId] = useState(id || '');
 
   const onUpload = async () => {
     const input = document.createElement('input');
@@ -25,7 +31,6 @@ export default function Messages() {
       'messageTa',
     ) as HTMLTextAreaElement;
     const message = textarea.value.trim();
-    console.log({ message });
     if (!message) {
       textarea.value = '';
       textarea.focus();
@@ -56,7 +61,7 @@ export default function Messages() {
     renderResponse(message);
   };
 
-  const renderResponse = (message: string) => {
+  const renderResponse = (localMessage: string) => {
     const messageContainerEndTarget = document.createElement('div')!;
     const messageContainer = document.getElementById('messageContainer')!;
 
@@ -80,52 +85,79 @@ export default function Messages() {
     // messageContainer.removeChild(messageContainerEndTarget);
 
     streamFetch(
-      message,
+      localMessage,
       conversatinId,
-      (
-        message: {
-          event: 'message' | 'message_end';
-          task_id: string;
-          message_id: string;
-          conversation_id: string;
-          answer: string;
-          created_at: number;
-        } | null,
+      async (
+        message:
+          | {
+              event: 'message' | 'message_end';
+              task_id: string;
+              message_id: string;
+              answer: string;
+            }
+          | undefined,
       ) => {
         if (message) {
-          const {
-            event,
-            task_id,
-            message_id,
-            conversation_id,
-            answer,
-            created_at,
-          } = message;
-          setTaskId(task_id);
-          setConversationId(conversation_id);
-          !messageContent.innerText &&
-            saveChatAction(conversation_id, 'Chat with Dify');
-          if (event === 'message') {
-            messageContent.innerText += answer;
-            messageContainerEndTarget.scrollIntoView({ behavior: 'smooth' });
-          } else if (event === 'message_end') {
+          const { event, task_id, answer } = message;
+          setConversationId(task_id);
+
+          messageContent.innerText += answer;
+          messageContainerEndTarget.scrollIntoView({ behavior: 'smooth' });
+          if (event === 'message_end') {
             messageContainer.removeChild(messageContainerEndTarget);
-            saveMessageAction(
-              conversation_id,
-              'remote',
-              messageContent.innerText,
-              created_at + '',
-            );
+
+            if (id) {
+              await saveMessageAction(id, 'local', localMessage);
+              await saveMessageAction(id, 'remote', messageContent.innerText);
+            } else {
+              const res = await saveChatAction('Dify' + Date.now());
+              if (res && res.data && res.data[0]) {
+                const { id: chatId, title } = res.data[0];
+                await saveMessageAction(chatId, 'local', localMessage);
+                await saveMessageAction(
+                  chatId,
+                  'remote',
+                  messageContent.innerText,
+                );
+
+                redirect(`/chat/${chatId}`, RedirectType.replace);
+              }
+            }
           }
         }
       },
     );
   };
 
+  console.log({ messages });
+
   return (
     <Fragment>
       <div className={styles.messageContainer}>
-        <div className={styles.container} id="messageContainer"></div>
+        <div className={styles.container} id="messageContainer">
+          {!messages || messages.length === 0
+            ? null
+            : messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={[styles.messageItem, styles[msg.role]].join(' ')}
+                >
+                  {msg.role === 'remote' && (
+                    <div className={styles.sparklesIcon}>
+                      <SparklesIcon />
+                    </div>
+                  )}
+                  <div
+                    className={[
+                      styles.messageContent,
+                      styles[`${msg.role}Content`],
+                    ].join(' ')}
+                  >
+                    {msg.content}
+                  </div>
+                </div>
+              ))}
+        </div>
       </div>
       <Input onSend={onSend} onUpload={onUpload} />
     </Fragment>

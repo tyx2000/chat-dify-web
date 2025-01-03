@@ -3,6 +3,7 @@ import styles from './index.module.css';
 import { fetcher } from '@/utils/tools';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 export default function ChatHistory({
   user,
@@ -11,30 +12,37 @@ export default function ChatHistory({
 }) {
   const pathname = usePathname();
   const {
-    data: { error, data },
+    data: { error, data = [] },
     isLoading,
     mutate,
   } = useSWR(user?.userId ? '/api/chatHistory' : null, fetcher, {
     fallbackData: [],
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnMount: false,
   });
 
   useEffect(() => {
     mutate();
-  }, [pathname, mutate]);
+  }, [pathname]);
 
   if (error) {
     return <div>Failed to load chat history</div>;
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className={styles.chatHistory}>
       <div className={styles.notLoginTip}>
-        {user?.email || data.length === 0
-          ? 'Your conversations will appear here once you start chatting!'
+        {user?.email
+          ? isLoading
+            ? 'Loading...'
+            : data.length === 0
+              ? 'Your conversations will appear here once you start chatting!'
+              : data.map((d: { id: string; title: string }) => (
+                  <Link key={d.id} href={`/chat/${d.id}`}>
+                    <div className={styles.chatRecord}>{d.title}</div>
+                  </Link>
+                ))
           : 'login to save and visit previous conversation!'}
       </div>
     </div>

@@ -45,22 +45,22 @@ export const createUser = async (email: string, password: string) => {
 };
 
 export const saveChat = async ({
-  id,
   userId,
   title,
 }: {
-  id: string;
   userId: string;
   title: string;
 }) => {
   const supabase = await createClient();
   try {
-    return await supabase.from('Chat').insert({
-      id,
-      createdAt: new Date(),
-      userId,
-      title,
-    });
+    return await supabase
+      .from('Chat')
+      .insert({
+        createdAt: new Date(),
+        userId,
+        title,
+      })
+      .select();
   } catch (error) {
     console.error('Failed to save chat in database');
     throw error;
@@ -108,9 +108,10 @@ export const saveMessages = async (message: {
   chatId: string;
   role: string;
   content: string;
-  createdAt: string;
+  createdAt: Date;
 }) => {
   const supabase = await createClient();
+  console.log({ message });
   try {
     return await supabase.from('Message').insert(message);
   } catch (error) {
