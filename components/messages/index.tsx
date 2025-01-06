@@ -129,8 +129,6 @@ export default function Messages({
     );
   };
 
-  console.log({ messages });
-
   return (
     <Fragment>
       <div className={styles.messageContainer}>

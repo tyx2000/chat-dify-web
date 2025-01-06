@@ -7,6 +7,7 @@ import { PlusIcon } from '../icons';
 import ChatHistory from './chatHistory';
 import UserNav from './userNav';
 import { Suspense } from 'react';
+import Link from 'next/link';
 
 export default function Sidebar({
   user,
@@ -22,7 +23,9 @@ export default function Sidebar({
     >
       <div className={styles.sidebarHeader}>
         <h3>ChatBot</h3>
-        <PlusIcon />
+        <Link href="/">
+          <PlusIcon />
+        </Link>
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         <ChatHistory user={user} />

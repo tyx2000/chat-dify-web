@@ -1,9 +1,24 @@
-import { cookies } from 'next/headers';
 import { getChatHistory } from '@/actions/chat';
+import { NextRequest } from 'next/server';
 
-export async function GET() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get('session')?.value;
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> },
+) {
+  // dynamic route segments /api/123
+  // const slug = (await params).slug; // 123
+
+  // query parameters /api/search?query=hello
+  // const searchParams = req.nextUrl.searchParams;
+  // const query = searchParams.get('query'); // hello
+
+  // post body
+  // const body = await req.json()
+
+  // body formData
+  // const formData = await req.formData()
+
+  const session = req.cookies.get('session')?.value;
 
   if (!session) {
     return Response.json({

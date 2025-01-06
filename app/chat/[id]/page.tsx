@@ -1,6 +1,6 @@
 import { getChatById, getMessagesByChatId } from '@/utils/db/queries';
 import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { decrypt } from '@/utils/session';
 import { DEFAULT_MODEL_NAME, models } from '@/constances/models';
 import Chat from '@/components/chat';
@@ -15,7 +15,9 @@ export default async function Page({
   const { id } = await params;
   const chat = await getChatById({ id });
 
-  if (!chat) {
+  // TODO get there by sharing, howt to?
+
+  if (!chat || !chat?.data?.length) {
     notFound();
   }
 
@@ -24,7 +26,7 @@ export default async function Page({
   let user = { email: '', userId: '' };
 
   if (!session) {
-    return notFound();
+    redirect('/login');
   } else {
     const { userId, email } = await decrypt(session);
 

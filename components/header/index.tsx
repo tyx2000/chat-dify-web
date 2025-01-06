@@ -5,8 +5,9 @@ import { SidebarLeftIcon } from '../icons';
 import { useContext } from 'react';
 import { SystemContext } from '../systemContext';
 import ModelSelector from '../modelSelector';
-import { PlusIcon } from '../icons';
+import { PlusIcon, ShareIcon } from '../icons';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Header({
   selectedModelId,
@@ -15,7 +16,12 @@ export default function Header({
   token?: string;
   selectedModelId: string;
 }) {
+  const pathname = usePathname();
   const { openSidebar, toggleSidebar } = useContext(SystemContext);
+
+  const shareChat = () => {
+    console.log({ pathname });
+  };
 
   return (
     <div className={styles.header}>
@@ -27,14 +33,19 @@ export default function Header({
           <SidebarLeftIcon />
         </div>
         {!openSidebar && (
-          <div className={styles.plusIcon}>
+          <Link className={styles.plusIcon} href="/">
             <PlusIcon />
-          </div>
+          </Link>
         )}
         <ModelSelector selectedModelId={selectedModelId} />
       </div>
       {token ? (
-        <div className={styles.loginButton}>Share</div>
+        pathname === '/' ? null : (
+          <div className={styles.loginButton} onClick={shareChat}>
+            Share
+            <ShareIcon />
+          </div>
+        )
       ) : (
         <Link href="/login">
           <div className={styles.loginButton}>LoGin</div>
