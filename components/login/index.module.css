@@ -23,12 +23,12 @@
   }
   .field {
     margin: 15px 0 0;
-    div {
+    & > div {
       color: #52525b;
       margin-bottom: 5px;
       font-size: 14px;
     }
-    input {
+    #email, #password {
       width: 320px;
       height: 40px;
       background-color: #f4f4f5;

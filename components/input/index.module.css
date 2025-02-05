@@ -15,7 +15,7 @@
     position: relative;
   }
 
-  textarea {
+  #messageTa {
     width: 100%;
     resize: none;
     font-size: 16px;
@@ -38,7 +38,7 @@
     right: 12px;
     display: flex;
     gap: 10px;
-    div {
+    & > div {
       width: 30px;
       height: 30px;
       border-radius: 50%;
@@ -47,12 +47,12 @@
       align-items: center;
       cursor: pointer;
     }
-    div:first-child {
+    & > div:first-child {
       background-color: #fff;
       border: 1px solid #ccc;
       transform: rotate(-45deg);
     }
-    div:last-child {
+    & > div:last-child {
       background-color: #2457dd;
       cursor: pointer;
       &:hover {
