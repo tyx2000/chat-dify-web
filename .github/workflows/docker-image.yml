@@ -20,7 +20,7 @@ jobs:
 
       - name: push files to vps
         run: |
-          scp -r . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/chat-dify-nextjs/chat-dify-web
+          scp -r -o StrictHostKeyChecking=no . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/chat-dify-nextjs/chat-dify-web
 
       - name: start servers
         run: |
