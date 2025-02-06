@@ -14,6 +14,7 @@ export default function Input({
         <textarea
           name="message"
           id="messageTa"
+          className={styles.messageTa}
           placeholder="Send a message..."
           onKeyDown={(e) => {
             if (e.key === 'Enter') {

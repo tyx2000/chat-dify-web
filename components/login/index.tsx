@@ -40,22 +40,24 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
             : 'Create an account with Your email and Password'}
         </div>
         <div className={styles.field}>
-          <div>Email Address</div>
+          <div className={styles.inputLabel}>Email Address</div>
           <input
             type="email"
             autoComplete="off"
             name="email"
             id="email"
+            className={styles.emailInput}
             placeholder="user@amer.com"
           />
         </div>
         <div className={styles.field}>
-          <div>Password</div>
+          <div className={styles.inputLabel}>Password</div>
           <input
             type="password"
             autoComplete="off"
             name="password"
             id="password"
+            className={styles.passwordInput}
           />
         </div>
         <button
