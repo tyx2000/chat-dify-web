@@ -1,18 +1,27 @@
-name: Docker Image CI
+name: Deploy to VPS
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
-
-  build:
-
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: checkout reqpository
+        uses: actions/checkout@v3
+
+      - name: set ssh token
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_TOKEN }}
+
+      - name: push files to vps
+        run: |
+          scp -r . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/chat-dify-nextjs/chat-dify-web
+
+      - name: start servers
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose up"
