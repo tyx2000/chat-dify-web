@@ -27,6 +27,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ~/services/chat-dify-nextjs/chat-dify-web"
           scp -r -o StrictHostKeyChecking=no . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/chat-dify-nextjs/chat-dify-web
 
+      - name: stop previous servers
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose down && echo 'server stopped successfully'"
+
       - name: start servers
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose up -d && echo 'server started successfully'"
