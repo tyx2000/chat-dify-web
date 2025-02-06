@@ -20,11 +20,11 @@ jobs:
 
       - name: delete old code
         run: |
-          ssh -o StrictHostKeyChecking=no . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "rm -rf ~/servers/chat-dify-nextjs/chat-dify-web"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "rm -rf ~/servers/chat-dify-nextjs/chat-dify-web"
 
       - name: push files to vps
         run: |
-          ssh -o StrictHostKeyChecking=no . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ~/services/chat-dify-nextjs/chat-dify-web"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ~/services/chat-dify-nextjs/chat-dify-web"
           scp -r -o StrictHostKeyChecking=no . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/chat-dify-nextjs/chat-dify-web
 
       - name: start servers
