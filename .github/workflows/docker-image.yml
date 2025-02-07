@@ -74,8 +74,9 @@ jobs:
             --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }} \
             --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }} \
             -t nextjs-project:${{ github.sha }} .
-          echo "build output:"
+          echo "====================build image=============="
           docker images nextjs-project:${{ github.sha }}
+          echo "====================build image=============="
           docker tag nextjs-project:${{ github.sha }} nextjs-project:latest
 
       - name: save image to tar
@@ -94,8 +95,9 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
           cd ~/servers/chat-dify-nextjs
           docker load -i ~/servers/docker-images/nextjs-project-${{ github.sha }}.tar
-          echo "load output:"
+          echo "====================load image=============="
           docker images nextjs-project:${{ github.sha }}
+          echo "====================load image=============="
           docker-compose down
           sed -i "s|nextjs-project.*|nextjs-project:${{ github.sha }}|g" docker-compose.yml
           docker-compose up -d
