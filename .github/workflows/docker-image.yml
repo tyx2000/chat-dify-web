@@ -110,6 +110,7 @@ jobs:
           echo "====================load image=============="
           docker images nextjs-project:${{ github.sha }}
           echo "====================load image=============="
+          rm -rf ~/servers/docker-images/nextjs-project-$${{ github.sha }}.tar
           docker-compose down
           sed -i "s|nextjs-project.*|nextjs-project:${{ github.sha }}|g" docker-compose.yml
           docker-compose up -d
