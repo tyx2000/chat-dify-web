@@ -38,9 +38,14 @@
 name: deploy to vps
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      target_tag:
+        description: 'tag to rollback to'
+        required: true
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   build-and-deploy:
