@@ -79,7 +79,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_TOKEN }}
 
       - name: push tar to vps
-        run: scp nextjs-project-${{ github.sha }}.tar ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/docker-images/
+        run: scp -o StrictHostKeyChecking=no nextjs-project-${{ github.sha }}.tar ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/docker-images/
 
       - name: load and run docker image on vps
         run: |
