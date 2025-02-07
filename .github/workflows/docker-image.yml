@@ -83,7 +83,7 @@ jobs:
 
       - name: load and run docker image on vps
         run: |
-          ssh -o StrictHostKeyChceking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
           cd ~/servers/chat-dify-nextjs
           docker load -i ~/servers/docker-images/nextjs-project-${{ github.sha }}.tar
           docker-compose down
