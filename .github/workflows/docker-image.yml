@@ -74,7 +74,7 @@ jobs:
         run: docker save -o nextjs-project-${{ github.sha }}.tar nextjs-project:${{ github.sha }}
 
       - name: setup ssh key
-        uses: webfactory/ssh-agent@0.7.0
+        uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_TOKEN }}
 
