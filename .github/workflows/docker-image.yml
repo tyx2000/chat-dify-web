@@ -1,36 +1,92 @@
-name: Deploy to VPS
+# name: Deploy to VPS
+
+# on:
+#   push:
+#     branches: ['main']
+#   pull_request:
+#     branches: ['main']
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: checkout reqpository
+#         uses: actions/checkout@v3
+
+#       - name: set ssh token
+#         uses: webfactory/ssh-agent@v0.7.0
+#         with:
+#           ssh-private-key: ${{ secrets.SSH_TOKEN }}
+
+#       - name: delete old code
+#         run: |
+#           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "rm -rf ~/servers/chat-dify-nextjs/chat-dify-web"
+
+#       - name: push files to vps
+#         run: |
+#           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ~/services/chat-dify-nextjs/chat-dify-web"
+#           scp -r -o StrictHostKeyChecking=no . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/chat-dify-nextjs/chat-dify-web
+
+#       - name: stop previous servers
+#         run: |
+#           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose down && echo 'server stopped successfully'"
+
+#       - name: start servers
+#         run: |
+#           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose up -d && echo 'server started successfully'"
+
+name: deploy to vps
 
 on:
   push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout reqpository
+      - name: checkout code
         uses: actions/checkout@v3
 
-      - name: set ssh token
-        uses: webfactory/ssh-agent@v0.7.0
+      - name: setup nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm-
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: build and tag nextjs docker image
+        run: |
+          docker build -t nextjs-project:${{ github.sha }} .
+          docker tag nextjs-project:${{ github.sha }} nextjs-project:latest
+
+      - name: save image to tar
+        run: docker save -o nextjs-project-${{ github.sha }}.tar nextjs-project:${{ github.sha }}
+
+      - name: setup ssh key
+        uses: webfactory/ssh-agent@0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_TOKEN }}
 
-      - name: delete old code
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "rm -rf ~/servers/chat-dify-nextjs/chat-dify-web"
+      - name: push tar to vps
+        run: scp nextjs-project-${{ github.sha }}.tar ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/docker-images/
 
-      - name: push files to vps
+      - name: load and run docker image on vps
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ~/services/chat-dify-nextjs/chat-dify-web"
-          scp -r -o StrictHostKeyChecking=no . ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/chat-dify-nextjs/chat-dify-web
-
-      - name: stop previous servers
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose down && echo 'server stopped successfully'"
-
-      - name: start servers
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose up -d && echo 'server started successfully'"
+          ssh -o StrictHostKeyChceking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
+          cd ~/servers/chat-dify-nextjs
+          docker load -i ~/servers/docker-images/nextjs-project-${{ github.sha }}.tar
+          docker-compose down
+          sed -i "s/IMAGE_TAG_PLACEHOLDER/${{ github.sha }}|g" docker-compose.yml
+          docker-compose up -d
+          EOF
