@@ -87,6 +87,6 @@ jobs:
           cd ~/servers/chat-dify-nextjs
           docker load -i ~/servers/docker-images/nextjs-project-${{ github.sha }}.tar
           docker-compose down
-          sed -i "s/IMAGE_TAG_PLACEHOLDER/${{ github.sha }}|g" docker-compose.yml
+          sed -i "s|IMAGE_TAG_PLACEHOLDER|${{ github.sha }}|g" docker-compose.yml
           docker-compose up -d
           EOF
