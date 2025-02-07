@@ -22,7 +22,7 @@ export default function Sidebar({
       )}
     >
       <div className={styles.sidebarHeader}>
-        <h3>ChatChat</h3>
+        <h3>ChatWise</h3>
         <Link href="/">
           <PlusIcon />
         </Link>
