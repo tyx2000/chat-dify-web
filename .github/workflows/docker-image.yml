@@ -39,10 +39,15 @@ name: deploy to vps
 
 on:
   workflow_dispatch:
+    # inputs:
+    #   target_tag:
+    #     description: 'tag to rollback to'
+    #     required: true
     inputs:
-      target_tag:
-        description: 'tag to rollback to'
+      branch:
+        description: 'branch to build'
         required: true
+        default: main
   # push:
   #   branches:
   #     - main
