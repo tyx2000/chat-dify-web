@@ -8,21 +8,27 @@ import ChatHistory from './chatHistory';
 import UserNav from './userNav';
 import { Suspense } from 'react';
 import Link from 'next/link';
+import useIsMobile from '@/hooks/useIsMobile';
+// import useClickOutside from '@/hooks/useClickOutside';
 
 export default function Sidebar({
   user,
 }: {
   user: { email?: string; userId?: string };
 }) {
-  const { openSidebar } = useContext(SystemContext);
+  const isMobile = useIsMobile();
+  const { openSidebar, toggleSidebar } = useContext(SystemContext);
+
   return (
     <div
-      className={[styles.sidebar, openSidebar ? '' : styles.hideSidebar].join(
-        ' ',
-      )}
+      className={[
+        styles.sidebar,
+        openSidebar ? '' : styles.hideSidebar,
+        isMobile && openSidebar ? styles.fixSidebar : '',
+      ].join(' ')}
     >
       <div className={styles.sidebarHeader}>
-        <h3>ChatWise</h3>
+        <h3>ChatCat</h3>
         <Link href="/">
           <PlusIcon />
         </Link>

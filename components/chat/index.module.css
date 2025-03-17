@@ -3,4 +3,23 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+}
+
+.filter {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  opacity: 0.5;
+  transition: all linear 0.2s;
+  visibility: visible;
+}
+
+.noneFilter {
+  visibility: hidden;
+  opacity: 0;
+  background-color: #fff;
 }

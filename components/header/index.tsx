@@ -26,10 +26,7 @@ export default function Header({
   return (
     <div className={styles.header}>
       <div className={styles.leftButtons}>
-        <div
-          className={styles.sidebarButton}
-          onClick={() => toggleSidebar(!openSidebar)}
-        >
+        <div className={styles.sidebarButton} onClick={() => toggleSidebar()}>
           <SidebarLeftIcon />
         </div>
         {!openSidebar && (

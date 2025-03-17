@@ -3,7 +3,8 @@
   height: 100vh;
   display: flex;
   justify-content: center;
-
+  /* background-color: var(--background);
+  color: var(--foreground); */
   .loginForm {
     width: 430px;
     display: flex;
@@ -63,10 +64,11 @@
     }
   }
   .switch {
-    color: #52525b;
+    color: var(--foreground);
     font-size: 14px;
   }
   .router {
     font-weight: bold;
+    text-decoration: underline;
   }
 }

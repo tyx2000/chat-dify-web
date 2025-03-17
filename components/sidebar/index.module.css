@@ -1,11 +1,13 @@
 .sidebar {
   width: 250px;
   height: 100vh;
+  opacity: 1;
   background-color: #fafafa;
   transition: all ease-out 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  z-index: 10;
 
   .sidebarHeader {
     width: 100%;
@@ -17,8 +19,13 @@
   }
 }
 
+.fixSidebar {
+  position: absolute;
+}
+
 .hideSidebar {
   width: 0;
+  opacity: 0;
   transform: translateX(-250px);
 }
 

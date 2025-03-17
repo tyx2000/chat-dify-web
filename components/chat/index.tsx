@@ -3,6 +3,7 @@ import Header from '../header';
 import Messages from '../messages';
 import { cookies } from 'next/headers';
 import { models, DEFAULT_MODEL_NAME } from '@/constances/models';
+import Filter from './filter';
 
 export default async function Chat({
   id,
@@ -23,6 +24,7 @@ export default async function Chat({
     <div className={styles.chat}>
       <Header selectedModelId={selectedModelId} token={token} />
       <Messages id={id} messages={messages} />
+      <Filter />
     </div>
   );
 }

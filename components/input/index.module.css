@@ -2,11 +2,11 @@
   height: 150px;
   display: flex;
   justify-content: center;
-  padding: 15px 0;
+  padding: 10px;
   border-top: 1px dotted #eee;
 
   .container {
-    width: 80%;
+    width: 92%;
     max-width: 800px;
     min-width: 200px;
 

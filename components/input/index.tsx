@@ -15,7 +15,7 @@ export default function Input({
           name="message"
           id="messageTa"
           className={styles.messageTa}
-          placeholder="Send a message..."
+          placeholder="Ask Something"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
