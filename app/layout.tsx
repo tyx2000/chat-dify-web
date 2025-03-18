@@ -28,6 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* <ReactScan /> */}
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      />
+      <link rel="dns-prefetch" href="https://yamazaki.buzz/" />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Toaster position="top-center" />
         <SystemProvider>{children}</SystemProvider>
