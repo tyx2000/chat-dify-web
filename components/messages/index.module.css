@@ -10,16 +10,6 @@
     display: flex;
     margin-bottom: 10px;
     gap: 10px;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
   }
 
   .local {
@@ -39,17 +29,27 @@
   }
   .localContent,
   .remoteContent {
+    font-size: 14px;
     max-width: 70%;
     border-radius: 5px;
     padding: 6px 8px;
     word-wrap: break-word;
+    /* 防止纯英文文本改变父容器宽度 */
+    word-break: break-all;
+    opacity: 0;
   }
   .localContent {
+    transform: translateX(70%) scale(0.1);
     background-color: #2457dd;
     color: #fff;
+    animation: fadeIn 0.2s ease-in forwards;
   }
   .remoteContent {
+    transform: translateX(-70%) scale(0.1);
     background-color: #fafafa;
+    border: 1px solid #eee;
+
+    animation: fadeIn 0.2s ease-in forwards;
   }
 }
 
@@ -58,4 +58,11 @@
   display: flex;
   justify-content: center;
   overflow: hidden auto;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }

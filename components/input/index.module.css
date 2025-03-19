@@ -4,7 +4,6 @@
   display: flex;
   justify-content: center;
   padding: 8px;
-  border-top: 1px dotted #eee;
 
   .container {
     width: 100%;

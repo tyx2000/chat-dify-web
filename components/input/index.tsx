@@ -13,7 +13,7 @@ export default function Input({
       <div className={styles.container}>
         <textarea
           name="message"
-          id="messageTa"
+          id="messageInputArea"
           className={styles.messageTa}
           placeholder="Ask Something"
           onKeyDown={(e) => {

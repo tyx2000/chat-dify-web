@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import SystemProvider from '@/components/systemContext';
 import { Toaster } from 'sonner';
-// import ReactScan from '@/components/reactScan';
+import ReactScan from '@/components/reactScan';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <ReactScan /> */}
+      <ReactScan />
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
