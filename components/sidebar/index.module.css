@@ -1,6 +1,6 @@
 .sidebar {
   width: 250px;
-  height: 100vh;
+  height: 100dvh;
   opacity: 1;
   background-color: #fafafa;
   transition: all ease-out 0.2s;

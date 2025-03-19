@@ -9,6 +9,7 @@ import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
 import { saveChatAction, saveMessageAction } from '@/actions/chat';
 import { redirect, RedirectType } from 'next/navigation';
+import useIsMobile from '@/hooks/useIsMobile';
 
 export default function Messages({
   id,
@@ -17,6 +18,7 @@ export default function Messages({
   id?: string;
   messages?: { chatId: string; content: string; id: string; role: string }[];
 }) {
+  const isMobile = useIsMobile();
   const [conversatinId, setConversationId] = useState(id || '');
 
   const onUpload = async () => {
@@ -48,6 +50,12 @@ export default function Messages({
     messageContent.innerText = message;
 
     messageItem.appendChild(messageContent);
+
+    // messageContainer.insertAdjacentElement('beforeend', messageItem);
+    // messageContainer.insertAdjacentElement(
+    //   'beforeend',
+    //   messageContainerEndTarget,
+    // );
     messageContainer.appendChild(messageItem);
     messageContainer.appendChild(messageContainerEndTarget);
 
@@ -55,7 +63,7 @@ export default function Messages({
     messageContainer.removeChild(messageContainerEndTarget);
 
     textarea.value = '';
-    textarea.focus();
+    isMobile ? textarea.blur() : textarea.focus();
 
     // render LLM response text
     renderResponse(message);
