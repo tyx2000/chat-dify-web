@@ -10,13 +10,13 @@
   transition: all linear 0.2s;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .container.showSide {
     filter: blur(10px);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .container.showSide {
     width: calc(100vw - 300px);
   }
