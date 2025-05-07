@@ -25,10 +25,10 @@
     border-radius: 8px;
 
     padding: 8px;
-    transition: all ease-in 0.3s;
+    transition: all linear 0.2s;
     outline: none;
     &:focus {
-      border-color: #09090b;
+      border-color: #ccc;
     }
   }
 
@@ -53,10 +53,10 @@
       transform: rotate(-45deg);
     }
     & > div:last-child {
-      background-color: #2457dd;
+      background-color: var(--main-bgc);
       cursor: pointer;
       &:hover {
-        background-color: #3967e0;
+        background-color: var(--main-hover-bgc);
       }
     }
   }

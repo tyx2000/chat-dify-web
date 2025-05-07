@@ -12,7 +12,7 @@ import Loading from '../loading';
 
 export default function Login({ mode }: { mode: 'login' | 'register' }) {
   const isLogin = mode === 'login';
-  const buttonText = isLogin ? 'LoGin' : 'ReGister';
+  const buttonText = isLogin ? 'Login' : 'Register';
 
   const [state, action, pending] = useActionState(
     isLogin ? login : register,
@@ -36,8 +36,8 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
         <h3 className={styles.title}>{buttonText}</h3>
         <div className={styles.tip}>
           {isLogin
-            ? 'Use Your email and Password to loGin'
-            : 'Create an account with Your email and Password'}
+            ? 'Use your email and password to login'
+            : 'Create an account with Your email and password'}
         </div>
         <div className={styles.field}>
           <div className={styles.inputLabel}>Email Address</div>
@@ -69,13 +69,13 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
           <div>{buttonText}</div>
         </button>
         <div className={styles.switch}>
-          {isLogin ? 'Dont' : 'AlreadY'} have an account?&nbsp;
+          {isLogin ? 'Dont' : 'Already'} have an account?&nbsp;
           <Link
             href={isLogin ? '/register' : '/login'}
             replace
             className={styles.router}
           >
-            {isLogin ? 'ReGister' : 'LoGin'}
+            {isLogin ? 'Register' : 'Login'}
             &nbsp;
           </Link>
           {isLogin ? 'for free' : 'instead'}.

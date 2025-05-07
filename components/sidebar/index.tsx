@@ -8,30 +8,32 @@ import ChatHistory from './chatHistory';
 import UserNav from './userNav';
 import { Suspense } from 'react';
 import Link from 'next/link';
-import useIsMobile from '@/hooks/useIsMobile';
-// import useClickOutside from '@/hooks/useClickOutside';
+import { SidebarLeftIcon } from '../icons';
 
 export default function Sidebar({
   user,
 }: {
   user: { email?: string; userId?: string };
 }) {
-  const isMobile = useIsMobile();
-  const { openSidebar, toggleSidebar } = useContext(SystemContext);
+  const { sidePanel, toggleSidePanel } = useContext(SystemContext);
 
   return (
     <div
-      className={[
-        styles.sidebar,
-        openSidebar ? '' : styles.hideSidebar,
-        isMobile && openSidebar ? styles.fixSidebar : '',
-      ].join(' ')}
+      className={[styles.sidebar, sidePanel ? '' : styles.hideSidebar].join(
+        ' ',
+      )}
     >
       <div className={styles.sidebarHeader}>
         <h3>ChatCat</h3>
-        <Link href="/">
-          <PlusIcon />
-        </Link>
+
+        <div className={styles.sidebarHeaderAction}>
+          <Link href="/">
+            <PlusIcon />
+          </Link>
+          <div onClick={() => toggleSidePanel()}>
+            <SidebarLeftIcon />
+          </div>
+        </div>
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         <ChatHistory user={user} />

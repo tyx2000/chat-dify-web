@@ -1,41 +1,47 @@
-.modelSelector {
-  display: flex;
-  gap: 8px;
-  height: 34px;
-  padding: 0 10px;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  transition: all linear 0.2s;
+.container {
   position: relative;
 
-  &:hover {
-    cursor: pointer;
-    background-color: #fafafa;
-  }
-
-  .modelName {
-    font-size: 14px;
-  }
-
-  .arrowIcon {
-    width: 16px;
-    height: 16px;
+  .modelSelector {
+    display: flex;
+    gap: 8px;
+    height: 34px;
+    padding: 0 10px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     transition: all linear 0.2s;
-  }
+    position: relative;
 
-  &:hover {
+    &:hover {
+      cursor: pointer;
+      background-color: #fafafa;
+    }
+
+    .modelName {
+      font-size: 14px;
+    }
+
     .arrowIcon {
-      transform: rotate(180deg);
+      width: 16px;
+      height: 16px;
+      transition: all linear 0.2s;
     }
 
-    .dropdown {
-      opacity: 1;
-      z-index: 999;
-      transform: translateY(0px);
+    &:hover {
+      .arrowIcon {
+        transform: rotate(180deg);
+      }
+
+      .dropdown {
+        opacity: 1;
+        z-index: 1;
+      }
     }
   }
-
+  .dropdown.showDropdown {
+    opacity: 1;
+    z-index: 1;
+  }
   .dropdown {
     position: absolute;
     width: 260px;
@@ -53,11 +59,11 @@
 
     opacity: 0;
     z-index: -1;
-    transform: translateY(10px);
+    transform: translateY(5px);
 
     .modelOption {
       height: 60px;
-
+      cursor: pointer;
       padding: 8px;
       transition: all linear 0.2s;
       &:hover {

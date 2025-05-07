@@ -17,7 +17,7 @@ export default function Header({
   selectedModelId: string;
 }) {
   const pathname = usePathname();
-  const { openSidebar, toggleSidebar } = useContext(SystemContext);
+  const { sidePanel, toggleSidePanel } = useContext(SystemContext);
 
   const shareChat = () => {
     console.log({ pathname });
@@ -26,10 +26,15 @@ export default function Header({
   return (
     <div className={styles.header}>
       <div className={styles.leftButtons}>
-        <div className={styles.sidebarButton} onClick={() => toggleSidebar()}>
-          <SidebarLeftIcon />
-        </div>
-        {!openSidebar && (
+        {!sidePanel && (
+          <div
+            className={styles.sidebarButton}
+            onClick={() => toggleSidePanel()}
+          >
+            <SidebarLeftIcon />
+          </div>
+        )}
+        {!sidePanel && (
           <Link className={styles.plusIcon} href="/">
             <PlusIcon />
           </Link>
@@ -45,7 +50,7 @@ export default function Header({
         )
       ) : (
         <Link href="/login">
-          <div className={styles.loginButton}>LoGin</div>
+          <div className={styles.loginButton}>Login</div>
         </Link>
       )}
     </div>

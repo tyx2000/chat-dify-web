@@ -1,25 +1,23 @@
-.chat {
-  flex: 1;
+.container {
+  width: 100vw;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
-}
-
-.filter {
-  width: 100vw;
-  height: 100dvh;
   position: absolute;
+  right: 0;
   top: 0;
-  left: 0;
-  background-color: #000;
-  opacity: 0.5;
   transition: all linear 0.2s;
-  visibility: visible;
 }
 
-.noneFilter {
-  visibility: hidden;
-  opacity: 0;
-  background-color: #fff;
+@media (max-width: 1023px) {
+  .container.showSide {
+    filter: blur(10px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container.showSide {
+    width: calc(100vw - 300px);
+  }
 }

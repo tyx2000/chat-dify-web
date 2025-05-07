@@ -1,5 +1,5 @@
 .page {
   width: 100vw;
   height: 100dvh;
-  display: flex;
+  position: relative;
 }

@@ -1,13 +1,19 @@
 .sidebar {
-  width: 250px;
+  width: 300px;
   height: 100dvh;
+  position: absolute;
+  left: 0;
+  top: 0;
   opacity: 1;
   background-color: #fafafa;
-  transition: all ease-out 0.2s;
+  transition: all linear 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   z-index: 10;
+  box-shadow:
+    rgba(17, 17, 26, 0.05) 0px 1px 0px,
+    rgba(17, 17, 26, 0.1) 0px 0px 8px;
 
   .sidebarHeader {
     width: 100%;
@@ -16,17 +22,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .sidebarHeaderAction {
+      width: 60px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      div {
+        cursor: pointer;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        background-color: #2457dd;
+        color: #fff;
+      }
+    }
   }
 }
 
-.fixSidebar {
-  position: absolute;
-}
-
 .hideSidebar {
-  width: 0;
   opacity: 0;
-  transform: translateX(-250px);
+  transform: translateX(-300px);
 }
 
 .chatHistory {
@@ -67,7 +87,7 @@
     right: 2px;
     top: 0;
     cursor: pointer;
-    transition: all linear 0.3s;
+    transition: all linear 0.2s;
     display: flex;
     gap: 8px;
     & > div {

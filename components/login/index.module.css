@@ -38,7 +38,7 @@
       border: 2px solid #e4e4e7;
       border-radius: 8px;
       padding: 4px 10px;
-      transition: all linear 0.3s;
+      transition: all linear 0.2s;
       outline: none;
       &:focus {
         border-color: #09090b;
@@ -51,7 +51,7 @@
     font-size: 14px;
     font-weight: bold;
     color: #fff;
-    background-color: #2457dd;
+    background-color: var(--main-bgc);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,7 +61,7 @@
     margin: 40px 0 20px;
     cursor: pointer;
     &:hover {
-      background-color: #3967e0;
+      background-color: var(--main-hover-bgc);
     }
   }
   .switch {

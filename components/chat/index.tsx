@@ -1,9 +1,8 @@
-import styles from './index.module.css';
 import Header from '../header';
 import Messages from '../messages';
 import { cookies } from 'next/headers';
 import { models, DEFAULT_MODEL_NAME } from '@/constances/models';
-import Filter from './filter';
+import Container from './container';
 
 export default async function Chat({
   id,
@@ -21,10 +20,9 @@ export default async function Chat({
     DEFAULT_MODEL_NAME;
 
   return (
-    <div className={styles.chat}>
+    <Container>
       <Header selectedModelId={selectedModelId} token={token} />
       <Messages id={id} messages={messages} />
-      <Filter />
-    </div>
+    </Container>
   );
 }

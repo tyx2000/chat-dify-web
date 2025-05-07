@@ -1,5 +1,5 @@
 import styles from './page.module.css';
-import Sidebar from '@/components/sidebar';
+import SidePanel from '@/components/sidebar';
 import Chat from '@/components/chat';
 import { cookies } from 'next/headers';
 import { decrypt } from '@/utils/session';
@@ -18,7 +18,7 @@ export default async function Home() {
 
   return (
     <div className={styles.page}>
-      <Sidebar user={user} />
+      <SidePanel user={user} />
       <Chat />
     </div>
   );
