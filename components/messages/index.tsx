@@ -9,7 +9,7 @@ import streamFetch from '@/utils/streamFetch';
 import { useState } from 'react';
 import { redirect, RedirectType } from 'next/navigation';
 import useIsMobile from '@/hooks/useIsMobile';
-import { saveChat, saveMessages } from '@/utils/db/queries';
+import { saveChatAction, saveMessagesAction } from '@/actions/chat';
 
 export default function Messages({
   id,
@@ -97,7 +97,7 @@ export default function Messages({
               scrollListToEnd();
               let chatId = id;
               if (!chatId) {
-                const { data } = await saveChat('Dify' + new Date());
+                const { data } = await saveChatAction('Dify' + new Date());
                 if (data && data[0]) {
                   const { id: newChatId, title } = data[0];
                   chatId = newChatId;
@@ -108,7 +108,7 @@ export default function Messages({
                   { role: 'local', content: localMessage },
                   { role: 'remote', content: messageContent.innerText },
                 ].map((item) => ({ ...item, chatId, createdAt: new Date() }));
-                await saveMessages(messages);
+                await saveMessagesAction(messages);
                 !id && redirect(`/chat/${chatId}`, RedirectType.replace);
               }
             }

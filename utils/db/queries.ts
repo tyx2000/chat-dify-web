@@ -15,7 +15,6 @@ import { genSaltSync, hashSync } from 'bcrypt-ts';
 // } from './schema';
 // import { eq, desc, asc } from 'drizzle-orm';
 import { createClient } from '../supabase/server';
-import { getUserInfo } from '../session';
 
 config({ path: '.env.local' });
 
@@ -45,9 +44,8 @@ export const createUser = async (email: string, password: string) => {
   }
 };
 
-export const saveChat = async (title: string) => {
+export const saveChat = async (title: string, userId: string) => {
   const supabase = await createClient();
-  const { userId } = await getUserInfo();
   try {
     return await supabase
       .from('Chat')

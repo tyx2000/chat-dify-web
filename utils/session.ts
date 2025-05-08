@@ -29,14 +29,10 @@ export const decrypt = async (token: string): Promise<UserInfo> => {
     return {};
   }
 };
-export const changeModelId = async (id: string) => {
-  const cookieStore = await cookies();
-  cookieStore.set('modelId', id);
-};
 
 export const getUserInfo = async (): Promise<UserInfo> => {
   const cookieStore = await cookies();
-  const session = cookieStore.get('session')!.value;
+  const session = cookieStore.get('session')?.value || '';
   const { userId, email } = (await decrypt(session)) || {};
   return { userId, email };
 };
