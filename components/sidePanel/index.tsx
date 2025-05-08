@@ -10,10 +10,10 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { SidebarLeftIcon } from '../icons';
 
-export default function Sidebar({
+export default function SidePanel({
   user,
 }: {
-  user: { email?: string; userId?: string };
+  user: { email: string; userId: string };
 }) {
   const { sidePanel, toggleSidePanel } = useContext(SystemContext);
 

@@ -18,7 +18,7 @@ export interface LoginResponse {
   error?: 'user_not_exist' | 'wrong_password' | 'invalid_data';
 }
 export const login = async (
-  state: any,
+  _: any,
   formData: FormData,
 ): Promise<LoginResponse> => {
   try {
@@ -65,7 +65,7 @@ export const logout = async () => {
   revalidatePath('/');
 };
 
-export const register = async (state: any, formData: FormData) => {
+export const register = async (_: any, formData: FormData) => {
   try {
     const validatedData = authFormSchema.parse({
       email: formData.get('email'),

@@ -2,7 +2,7 @@ import styles from './index.module.css';
 
 import { ChevronDownIcon } from '../icons';
 import { models } from '@/constances/models';
-import { changeModelId } from '@/actions/chat';
+import { changeModelId } from '@/utils/session';
 import { useRef, useState } from 'react';
 import useClickOutside from '@/hooks/useClickOutside';
 

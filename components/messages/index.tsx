@@ -7,9 +7,9 @@ import { Fragment } from 'react';
 import streamFetch from '@/utils/streamFetch';
 // import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
-import { saveChatAction, saveMessageAction } from '@/actions/chat';
 import { redirect, RedirectType } from 'next/navigation';
 import useIsMobile from '@/hooks/useIsMobile';
+import { saveChat, saveMessages } from '@/utils/db/queries';
 
 export default function Messages({
   id,
@@ -67,37 +67,9 @@ export default function Messages({
     }
   };
 
-  const onUpload = async () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.click();
-    input.onchange = async (e) => {};
-  };
-
-  const onSend = async () => {
-    const textarea = document.getElementById(
-      'messageInputArea',
-    ) as HTMLTextAreaElement;
-    const message = textarea.value.trim();
-
-    if (!message) {
-      textarea.value = '';
-      textarea.focus();
-      return;
-    }
-
-    insertMessage('local', message);
-    textarea.value = '';
-    isMobile ? textarea.blur() : textarea.focus();
-
-    // render LLM response text
-    renderResponse(message);
-  };
-
   const renderResponse = (localMessage: string) => {
     const { messageContainer, messageContent } = insertMessage('remote', '');
-    messageContainer &&
-      messageContent &&
+    if (messageContainer && messageContent) {
       streamFetch(
         localMessage,
         conversatinId,
@@ -123,28 +95,57 @@ export default function Messages({
             scrollListToEnd();
             if (event === 'message_end') {
               scrollListToEnd();
-              if (id) {
-                await saveMessageAction(id, 'local', localMessage);
-                await saveMessageAction(id, 'remote', messageContent.innerText);
-              } else {
-                const res = await saveChatAction('Dify' + Date.now());
-                if (res && res.data && res.data[0]) {
-                  const { id: chatId, title } = res.data[0];
-                  await saveMessageAction(chatId, 'local', localMessage);
-                  await saveMessageAction(
-                    chatId,
-                    'remote',
-                    messageContent.innerText,
-                  );
-
-                  redirect(`/chat/${chatId}`, RedirectType.replace);
+              let chatId = id;
+              if (!chatId) {
+                const { data } = await saveChat('Dify' + new Date());
+                if (data && data[0]) {
+                  const { id: newChatId, title } = data[0];
+                  chatId = newChatId;
                 }
+              }
+              if (chatId) {
+                const messages = [
+                  { role: 'local', content: localMessage },
+                  { role: 'remote', content: messageContent.innerText },
+                ].map((item) => ({ ...item, chatId, createdAt: new Date() }));
+                await saveMessages(messages);
+                !id && redirect(`/chat/${chatId}`, RedirectType.replace);
               }
             }
           } else {
           }
         },
       );
+    }
+  };
+
+  const onUpload = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.click();
+    input.onchange = async (e) => {};
+  };
+
+  const onSend = async () => {
+    const textarea = document.getElementById(
+      'messageInputArea',
+    ) as HTMLTextAreaElement;
+
+    if (!textarea) return;
+
+    const message = textarea.value.trim();
+
+    if (!message) {
+      textarea.value = '';
+      textarea.focus();
+    } else {
+      insertMessage('local', message);
+      textarea.value = '';
+      isMobile ? textarea.blur() : textarea.focus();
+
+      // render LLM response text
+      renderResponse(message);
+    }
   };
 
   return (

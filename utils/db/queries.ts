@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { config } from 'dotenv';
+import { config, decrypt } from 'dotenv';
 // import postgres from 'postgres';
 // import { drizzle } from 'drizzle-orm/postgres-js';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
@@ -15,6 +15,7 @@ import { genSaltSync, hashSync } from 'bcrypt-ts';
 // } from './schema';
 // import { eq, desc, asc } from 'drizzle-orm';
 import { createClient } from '../supabase/server';
+import { getUserInfo } from '../session';
 
 config({ path: '.env.local' });
 
@@ -44,14 +45,9 @@ export const createUser = async (email: string, password: string) => {
   }
 };
 
-export const saveChat = async ({
-  userId,
-  title,
-}: {
-  userId: string;
-  title: string;
-}) => {
+export const saveChat = async (title: string) => {
   const supabase = await createClient();
+  const { userId } = await getUserInfo();
   try {
     return await supabase
       .from('Chat')
@@ -80,7 +76,7 @@ export const deleteChatById = async ({ id }: { id: string }) => {
   }
 };
 
-export const getChatsByUserId = async ({ id }: { id: string }) => {
+export const getChatsByUserId = async (id: string) => {
   const supabase = await createClient();
   try {
     return await supabase
@@ -104,16 +100,17 @@ export const getChatById = async ({ id }: { id: string }) => {
   }
 };
 
-export const saveMessages = async (message: {
-  chatId: string;
-  role: string;
-  content: string;
-  createdAt: Date;
-}) => {
+export const saveMessages = async (
+  messages: {
+    chatId: string;
+    role: string;
+    content: string;
+    createdAt: Date;
+  }[],
+) => {
   const supabase = await createClient();
-  console.log({ message });
   try {
-    return await supabase.from('Message').insert(message);
+    return await supabase.from('Message').insert(messages);
   } catch (error) {
     console.error('Failed to save messages in database', error);
     throw error;

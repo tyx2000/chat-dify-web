@@ -9,6 +9,8 @@ config({ path: '.env.local' });
 const secreKey = process.env.SESSION_SECRET_KEY;
 const encodedKey = new TextEncoder().encode(secreKey);
 
+type UserInfo = { userId?: string; email?: string };
+
 export const encrypt = async (payload: { userId: string; email: string }) => {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
@@ -17,15 +19,26 @@ export const encrypt = async (payload: { userId: string; email: string }) => {
     .sign(encodedKey);
 };
 
-export const decrypt = async (token: string) => {
+export const decrypt = async (token: string): Promise<UserInfo> => {
   try {
     const { payload } = await jwtVerify(token, encodedKey, {
       algorithms: ['HS256'],
     });
-    return payload;
+    return payload as UserInfo;
   } catch (error) {
     return {};
   }
+};
+export const changeModelId = async (id: string) => {
+  const cookieStore = await cookies();
+  cookieStore.set('modelId', id);
+};
+
+export const getUserInfo = async (): Promise<UserInfo> => {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('session')!.value;
+  const { userId, email } = (await decrypt(session)) || {};
+  return { userId, email };
 };
 
 export const createSession = async (payload: {

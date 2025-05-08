@@ -1,4 +1,5 @@
-import { getChatHistory } from '@/actions/chat';
+import { getChatsByUserId } from '@/utils/db/queries';
+import { getUserInfo } from '@/utils/session';
 import { NextRequest } from 'next/server';
 
 export async function GET(
@@ -18,15 +19,16 @@ export async function GET(
   // body formData
   // const formData = await req.formData()
 
-  const session = req.cookies.get('session')?.value;
+  // const session = req.cookies.get('session')?.value;
+  const { userId } = await getUserInfo();
 
-  if (!session) {
+  if (!userId) {
     return Response.json({
       status: 401,
       body: { message: 'Unauthorized' },
     });
   } else {
-    const chats = await getChatHistory();
+    const chats = await getChatsByUserId(userId + '');
     return Response.json(chats);
   }
 }

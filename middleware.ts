@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     return Response.redirect(new URL('/', nextUrl as unknown as URL));
   }
 
-  console.log('middleware', { session, pathname: nextUrl.pathname });
+  // console.log('middleware', { session, pathname: nextUrl.pathname });
 }
 
 export const config = {
