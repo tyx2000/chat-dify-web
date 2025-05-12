@@ -35,7 +35,11 @@ export default function Header({
           </div>
         )}
         {!sidePanel && (
-          <Link className={styles.plusIcon} href="/">
+          <Link
+            className={styles.plusIcon}
+            href="/"
+            aria-label="start a new conversation"
+          >
             <PlusIcon />
           </Link>
         )}
