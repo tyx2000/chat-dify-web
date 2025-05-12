@@ -10,8 +10,8 @@ const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
 const cspHeader = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' 'strict-dynamic' https: http:;
-  style-src 'self' 'unsafe-inline';
+  script-src 'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline' 'strict-dynamic' https: http:;
+  style-src 'self' ''nonce-${nonce} 'unsafe-inline';
   img-src 'self' blob: data:;
   font-src 'self';
   object-src 'none';
