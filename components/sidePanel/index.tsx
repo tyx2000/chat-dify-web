@@ -27,7 +27,7 @@ export default function SidePanel({
         <h3>ChatCat</h3>
 
         <div className={styles.sidebarHeaderAction}>
-          <Link href="/">
+          <Link href="/" aria-label="start a new conversation">
             <PlusIcon />
           </Link>
           <div onClick={() => toggleSidePanel()}>

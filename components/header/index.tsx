@@ -53,7 +53,7 @@ export default function Header({
           </div>
         )
       ) : (
-        <Link href="/login">
+        <Link href="/login" aria-label="to login">
           <div className={styles.loginButton}>Login</div>
         </Link>
       )}

@@ -74,6 +74,7 @@ export default function Login({ mode }: { mode: 'login' | 'register' }) {
             href={isLogin ? '/register' : '/login'}
             replace
             className={styles.router}
+            aria-label="switch to login or register"
           >
             {isLogin ? 'Register' : 'Login'}
             &nbsp;

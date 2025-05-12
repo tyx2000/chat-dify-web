@@ -6,18 +6,18 @@ import type { NextConfig } from 'next';
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const WebpackBarPlugin = require('webpackbar');
 
-// const cspHeader = `
-// default-src 'self';
-//   script-src 'self' 'unsafe-eval' 'unsafe-inline';
-//   style-src 'self' 'unsafe-inline';
-//   img-src 'self' blob: data:;
-//   font-src 'self';
-//   object-src 'none';
-//   base-uri 'self';
-//   form-action 'self';
-//   frame-ancestors 'none';
-//   upgrade-insecure-requests;
-// `;
+const cspHeader = `
+default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' blob: data:;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`;
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -51,7 +51,11 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains: preload',
+            value: 'max-age=31536000; includeSubDomains; preload',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: cspHeader.replace(/\n/g, ''),
           },
           {
             key: 'Cross-Origin-Opener-Policy',

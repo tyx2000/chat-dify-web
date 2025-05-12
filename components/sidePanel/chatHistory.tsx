@@ -37,7 +37,7 @@ const ChatRecord = ({
   };
 
   return (
-    <Link href={`/chat/${id}`}>
+    <Link href={`/chat/${id}`} aria-label="to selected chat">
       <div
         className={[
           styles.chatRecord,
