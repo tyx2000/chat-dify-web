@@ -6,10 +6,12 @@ import type { NextConfig } from 'next';
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const WebpackBarPlugin = require('webpackbar');
 
+const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+
 const cspHeader = `
-default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline';
-  style-src 'self' 'unsafe-inline';
+  default-src 'self';
+  script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+  style-src 'self' 'nonce-${nonce}';
   img-src 'self' blob: data:;
   font-src 'self';
   object-src 'none';
@@ -55,7 +57,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
+            value: cspHeader.replace(/\s{2,}/g, ' ').trim(),
           },
           {
             key: 'Cross-Origin-Opener-Policy',
