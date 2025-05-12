@@ -6,12 +6,12 @@ import type { NextConfig } from 'next';
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const WebpackBarPlugin = require('webpackbar');
 
-const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+// const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
 const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline';
-  style-src 'self' 'nonce-${nonce}' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data:;
   font-src 'self';
   object-src 'none';
