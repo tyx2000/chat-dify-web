@@ -6,7 +6,7 @@ import Input from '../input';
 import { Fragment } from 'react';
 import streamFetch from '@/utils/streamFetch';
 // import { createRoot } from 'react-dom/client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { redirect, RedirectType } from 'next/navigation';
 import useIsMobile from '@/hooks/useIsMobile';
 import { saveChatAction, saveMessagesAction } from '@/actions/chat';
@@ -176,7 +176,9 @@ export default function Messages({
               ))}
         </div>
       </div>
-      <Input onSend={onSend} onUpload={onUpload} />
+      <Suspense fallback={<>Loading</>}>
+        <Input onSend={onSend} onUpload={onUpload} />
+      </Suspense>
     </Fragment>
   );
 }
