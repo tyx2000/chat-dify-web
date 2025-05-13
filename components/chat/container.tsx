@@ -1,13 +1,13 @@
 'use client';
 
-import { ReactNode, useContext } from 'react';
+import { ReactNode } from 'react';
 import styles from './index.module.css';
-import { SystemContext } from '../systemContext';
 import useIsMobile from '@/hooks/useIsMobile';
+import { useGlobalStore } from '@/store/useGlobalStore';
 
 export default function Container({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
-  const { sidePanel, toggleSidePanel } = useContext(SystemContext);
+  const { sidePanel, toggleSidePanel } = useGlobalStore();
 
   return (
     <div

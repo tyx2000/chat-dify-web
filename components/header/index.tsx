@@ -2,12 +2,11 @@
 
 import styles from './index.module.css';
 import { SidebarLeftIcon } from '../icons';
-import { useContext } from 'react';
-import { SystemContext } from '../systemContext';
 import ModelSelector from '../modelSelector';
 import { PlusIcon, ShareIcon } from '../icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useGlobalStore } from '@/store/useGlobalStore';
 
 export default function Header({
   selectedModelId,
@@ -17,7 +16,7 @@ export default function Header({
   selectedModelId: string;
 }) {
   const pathname = usePathname();
-  const { sidePanel, toggleSidePanel } = useContext(SystemContext);
+  const { sidePanel, toggleSidePanel } = useGlobalStore();
 
   const shareChat = () => {
     console.log({ pathname });

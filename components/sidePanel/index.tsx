@@ -1,21 +1,20 @@
 'use client';
 
-import { useContext } from 'react';
 import styles from './index.module.css';
-import { SystemContext } from '../systemContext';
 import { PlusIcon } from '../icons';
 import ChatHistory from './chatHistory';
 import UserNav from './userNav';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { SidebarLeftIcon } from '../icons';
+import { useGlobalStore } from '@/store/useGlobalStore';
 
 export default function SidePanel({
   user,
 }: {
   user: { email: string; userId: string };
 }) {
-  const { sidePanel, toggleSidePanel } = useContext(SystemContext);
+  const { sidePanel, toggleSidePanel } = useGlobalStore();
 
   return (
     <div
