@@ -35,6 +35,7 @@
 #         run: |
 #           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "cd ~/servers/chat-dify-nextjs && docker-compose up -d && echo 'server started successfully'"
 
+# github action 生成 docker image
 name: deploy to vps
 
 on:
@@ -74,8 +75,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
+          node-version: 18
           key: ${{ runner.os }}-npm-${{ github.ref_name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-npm-
+          restore-keys: |
+            ${{ runner.os }}-npm-${{ github.ref_name }}-
+            ${{ runner.os }}-npm-
+            ${{ runner.os }}-
 
       - name: install dependencies
         run: npm ci
@@ -85,33 +90,45 @@ jobs:
           docker build \
             --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }} \
             --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }} \
-            -t nextjs-project:${{ github.sha }} .
+            -t chat-dify-web:${{ github.sha }} .
           echo "====================build image=============="
-          docker images nextjs-project:${{ github.sha }}
+          docker images chat-dify-web:${{ github.sha }}
           echo "====================build image=============="
-          docker tag nextjs-project:${{ github.sha }} nextjs-project:latest
+          docker tag chat-dify-web:${{ github.sha }} chat-dify-web:latest
 
       - name: save image to tar
-        run: docker save -o nextjs-project-${{ github.sha }}.tar nextjs-project:${{ github.sha }}
+        run: docker save -o chat-dify-web-${{ github.sha }}.tar chat-dify-web:${{ github.sha }}
 
-      - name: setup ssh key
-        uses: webfactory/ssh-agent@v0.7.0
+      - name: upload docker image tar
+        uses: appleboy/scp-action@v1.0.0
         with:
-          ssh-private-key: ${{ secrets.SSH_TOKEN }}
-
-      - name: push tar to vps
-        run: scp -o StrictHostKeyChecking=no nextjs-project-${{ github.sha }}.tar ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/servers/docker-images/
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_TOKEN }}
+          source: chat-dify-web:${{ github.sha }}.tar
+          target: ~/docker-images/
 
       - name: load and run docker image on vps
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
-          cd ~/servers/chat-dify-nextjs
-          docker load -i ~/servers/docker-images/nextjs-project-${{ github.sha }}.tar
-          echo "====================load image=============="
-          docker images nextjs-project:${{ github.sha }}
-          echo "====================load image=============="
-          rm -rf ~/servers/docker-images/nextjs-project-${{ github.sha }}.tar
-          docker-compose down
-          sed -i "s|nextjs-project.*|nextjs-project:${{ github.sha }}|g" docker-compose.yml
-          docker-compose up -d
-          EOF
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_TOKEN }}
+          script: |
+            docker load -i ~/docker-images/chat-dify-web:${{ github.sha }}.tar
+            
+            echo "====================load image=============="
+            docker images chat-dify-web:${{ github.sha }}
+            echo "====================load image=============="
+
+            cd ~/docker-images/ && ll
+            
+            rm -rf ~/docker-images/chat-dify-web:${{ github.sha }}.tar
+          # ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
+          # cd ~/servers/chat-dify-nextjs
+          # docker load -i ~/servers/docker-images/chat-dify-web-${{ github.sha }}.tar
+          # rm -rf ~/servers/docker-images/chat-dify-web-${{ github.sha }}.tar
+          # docker-compose down
+          # sed -i "s|chat-dify-web.*|chat-dify-web:${{ github.sha }}|g" docker-compose.yml
+          # docker-compose up -d
+          # EOF
