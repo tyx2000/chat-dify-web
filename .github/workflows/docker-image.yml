@@ -105,7 +105,7 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_TOKEN }}
-          source: chat-dify-web:${{ github.sha }}.tar
+          source: chat-dify-web-${{ github.sha }}.tar
           target: ~/docker-images/
 
       - name: load and run docker image on vps
