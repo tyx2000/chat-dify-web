@@ -115,15 +115,15 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_TOKEN }}
           script: |
-            docker load -i ~/docker-images/chat-dify-web:${{ github.sha }}.tar
+            docker load -i ~/docker-images/chat-dify-web-${{ github.sha }}.tar
             
             echo "====================load image=============="
             docker images chat-dify-web:${{ github.sha }}
             echo "====================load image=============="
 
-            cd ~/docker-images/ && ll
-            
-            rm -rf ~/docker-images/chat-dify-web:${{ github.sha }}.tar
+            cd ~/docker-images/ && ls
+
+            rm -rf ~/docker-images/chat-dify-web-${{ github.sha }}.tar
           # ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
           # cd ~/servers/chat-dify-nextjs
           # docker load -i ~/servers/docker-images/chat-dify-web-${{ github.sha }}.tar
