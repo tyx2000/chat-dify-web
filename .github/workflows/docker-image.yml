@@ -121,14 +121,9 @@ jobs:
             docker images chat-dify-web:${{ github.sha }}
             echo "====================load image=============="
 
-            cd ~/docker-images/ && ls
-
             rm -rf ~/docker-images/chat-dify-web-${{ github.sha }}.tar
-          # ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} << EOF
-          # cd ~/servers/chat-dify-nextjs
-          # docker load -i ~/servers/docker-images/chat-dify-web-${{ github.sha }}.tar
-          # rm -rf ~/servers/docker-images/chat-dify-web-${{ github.sha }}.tar
-          # docker-compose down
-          # sed -i "s|chat-dify-web.*|chat-dify-web:${{ github.sha }}|g" docker-compose.yml
-          # docker-compose up -d
-          # EOF
+
+            cd ~/servers/
+            sed -i "s|chat-dify-web.*|chat-dify-web:${{ github.sha }}|g" docker-compose.yml
+            echo "====================update docker-compose.yml=============="
+            cat docker-compose.yml
