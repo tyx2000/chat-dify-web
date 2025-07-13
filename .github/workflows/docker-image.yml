@@ -75,7 +75,6 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          node-version: 18
           key: ${{ runner.os }}-npm-${{ github.ref_name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-${{ github.ref_name }}-
@@ -125,5 +124,9 @@ jobs:
 
             cd ~/servers/
             sed -i "s|chat-dify-web.*|chat-dify-web:${{ github.sha }}|g" docker-compose.yml
-            echo "====================update docker-compose.yml=============="
-            cat docker-compose.yml
+
+            docker-compose down
+            docker-compose up -d
+
+            echo "clean old images and only keep latest 2"
+            
