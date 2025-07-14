@@ -129,4 +129,8 @@ jobs:
             docker-compose up -d
 
             echo "clean old images and only keep latest 2"
-            
+            IMAGE_TAGS_TO_REMOVE=$(docker images --filter=reference='chat-dify-web:*' --format '{{.Tag}} {{.CreatedAt}}' | sort -k2 -k3 -r | awk 'NR>2 {print $1}')
+            for tag in $IMAGE_TAGS_TO_REMOVE; do
+              echo "removing image chat-dify-web:$tag"
+              docker rmi chat-dify-web:$tag || true
+            done
