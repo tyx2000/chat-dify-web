@@ -1,10 +1,12 @@
 import styles from './index.module.css';
-import { PaperclipIcon, ArrowUpIcon } from '../icons';
+import { PaperclipIcon, ArrowUpIcon, StopIcon } from '../icons';
 
 export default function Input({
   onSend,
   onUpload,
+  responseRendering,
 }: {
+  responseRendering: boolean;
   onSend: () => void;
   onUpload: () => void;
 }) {
@@ -27,8 +29,14 @@ export default function Input({
           <div title="upload file" onClick={onUpload}>
             <PaperclipIcon />
           </div>
-          <div title="send" onClick={onSend}>
-            <ArrowUpIcon />
+          <div
+            title={responseRendering ? 'stop' : 'send'}
+            onClick={onSend}
+            className={
+              responseRendering ? styles.stopButton : styles.sendButton
+            }
+          >
+            {responseRendering ? <StopIcon /> : <ArrowUpIcon />}
           </div>
         </div>
       </div>

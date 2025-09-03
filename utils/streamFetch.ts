@@ -46,14 +46,20 @@ app.post('/dify-sse', (req, res) => {
 });
  */
 
+// const controller = new AbortController()
+// const timeoutSignal = AbortSignal.timeout(5000)
+// fetch("", {signal: AbortSignal.any([controller.signal, timeoutSignal])})
+
 const streamFetch = async (
   query: string,
   conversation_id: string,
+  ac: AbortController,
   callback: Function,
 ) =>
   // fetch(process.env.DIFY_APP_HOST!, {
   fetch('http://localhost:8080/dify-sse?conversation_id=' + conversation_id, {
     method: 'POST',
+    signal: ac ? ac.signal : null,
     headers: {
       Authorization: 'Bearer ' + process.env.DIFY_APP_KEY!,
       'Content-Type': 'application/json',

@@ -52,12 +52,30 @@
       border: 1px solid #ccc;
       transform: rotate(-45deg);
     }
-    & > div:last-child {
+    .sendButton {
       background-color: var(--main-bgc);
       cursor: pointer;
       &:hover {
         background-color: var(--main-hover-bgc);
       }
     }
+    .stopButton {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      animation: stopButtonOpacity 1s linear infinite;
+    }
+  }
+}
+
+@keyframes stopButtonOpacity {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
   }
 }

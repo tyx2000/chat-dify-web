@@ -3,7 +3,7 @@
 import styles from './index.module.css';
 import { SparklesIcon } from '../icons';
 import Input from '../input';
-import { Fragment } from 'react';
+import { Fragment, useRef } from 'react';
 import streamFetch from '@/utils/streamFetch';
 // import { createRoot } from 'react-dom/client';
 import { useState, Suspense } from 'react';
@@ -18,8 +18,10 @@ export default function Messages({
   id?: string;
   messages?: { chatId: string; content: string; id: string; role: string }[];
 }) {
+  const abortControllerRef = useRef<AbortController>(null);
   const isMobile = useIsMobile();
   const [conversatinId, setConversationId] = useState(id || '');
+  const [responseRendering, setResponseRendering] = useState(false);
 
   const scrollListToEnd = () => {
     const listContainer = document.getElementById('messageContainer');
@@ -70,9 +72,12 @@ export default function Messages({
   const renderResponse = (localMessage: string) => {
     const { messageContainer, messageContent } = insertMessage('remote', '');
     if (messageContainer && messageContent) {
+      setResponseRendering(true);
+      abortControllerRef.current = new AbortController();
       streamFetch(
         localMessage,
         conversatinId,
+        abortControllerRef.current,
         async (
           message:
             | {
@@ -88,12 +93,16 @@ export default function Messages({
 
             if (event === 'fetch_error') {
               answer = '网络错误🙅';
+              setResponseRendering(false);
+              abortControllerRef.current = null;
             }
             setConversationId(task_id);
 
             messageContent.innerText += answer;
             scrollListToEnd();
             if (event === 'message_end') {
+              setResponseRendering(false);
+              abortControllerRef.current = null;
               scrollListToEnd();
               let chatId = id;
               if (!chatId) {
@@ -113,9 +122,13 @@ export default function Messages({
               }
             }
           } else {
+            // todo 什么情况下没有message该做什么
           }
         },
-      );
+      ).catch(() => {
+        setResponseRendering(false);
+        abortControllerRef.current = null;
+      });
     }
   };
 
@@ -127,6 +140,13 @@ export default function Messages({
   };
 
   const onSend = async () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setResponseRendering(false);
+      return;
+    }
+
     const textarea = document.getElementById(
       'messageInputArea',
     ) as HTMLTextAreaElement;
@@ -177,7 +197,11 @@ export default function Messages({
         </div>
       </div>
       <Suspense fallback={<>Loading</>}>
-        <Input onSend={onSend} onUpload={onUpload} />
+        <Input
+          onSend={onSend}
+          onUpload={onUpload}
+          responseRendering={responseRendering}
+        />
       </Suspense>
     </Fragment>
   );
