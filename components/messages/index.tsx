@@ -133,10 +133,47 @@ export default function Messages({
   };
 
   const onUpload = async () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.click();
-    input.onchange = async (e) => {};
+    try {
+      const response = await fetch('/api/mockSSE?conversation_id=123123123', {
+        method: 'POST',
+        headers: {
+          Accept: 'text/event-stream',
+        },
+      });
+      if (!response.ok) {
+        throw Error('HTTP ERROR - ' + response.status);
+      }
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder('utf-8');
+      const read = () => {
+        reader?.read().then(({ value, done }) => {
+          if (done) {
+            console.log('mock sse response end');
+            return;
+          }
+          const chunk = decoder.decode(value, { stream: true });
+          chunk.split('\n\n').forEach((event) => {
+            const jsonData = event.substring(5).trim();
+            if (jsonData) {
+              try {
+                const data = JSON.parse(jsonData);
+                console.log(data);
+              } catch (error) {
+                console.log('invalid jsonData', error);
+              }
+            }
+          });
+          read();
+        });
+      };
+      read();
+    } catch (error) {
+      console.log('mock error', error);
+    }
+    // const input = document.createElement('input');
+    // input.type = 'file';
+    // input.click();
+    // input.onchange = async (e) => {};
   };
 
   const onSend = async () => {
