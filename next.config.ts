@@ -19,7 +19,7 @@ const cspHeader = `
   form-action 'self';
   frame-ancestors 'none';
   upgrade-insecure-requests;
-  connect-src 'self' http://localhost:8080;
+  connect-src 'self';
 `;
 
 const nextConfig: NextConfig = {

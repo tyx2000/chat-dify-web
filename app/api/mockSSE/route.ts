@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest, response: NextResponse) {
-  const searchParams = req.nextUrl.searchParams;
-  const conversation_id = searchParams.get('conversation_id');
-  console.log({ conversation_id });
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  // const searchParams = req.nextUrl.searchParams;
+  // const conversation_id = searchParams.get('conversation_id');
+  // console.log({ conversation_id });
 
   const stream = new ReadableStream({
     start(controller) {
